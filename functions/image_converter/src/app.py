@@ -46,7 +46,6 @@ class Processor(SoswProcessor):
                 continue
 
             image_data = self.download_from_s3(bucket_name, key)
-            logger.info(image_data)
             if file_format != 'webp':
                 webp_data = self.convert_to_webp(image_data)
                 new_key = key.rsplit('.', 1)[0] + '.webp'
@@ -55,7 +54,6 @@ class Processor(SoswProcessor):
 
 
     def convert_to_webp(self, image_data):
-        logger.info(f"Converting image to webp", image_data)
         image = Image.open(io.BytesIO(image_data))
         output = io.BytesIO()
         image.save(output, format="WEBP")
@@ -68,7 +66,6 @@ class Processor(SoswProcessor):
 
     def download_from_s3(self, bucket_name, key):
         response = self.s3_client.get_object(Bucket=bucket_name, Key=key)
-        logger.info(response)
         return response['Body'].read()
 
     def upload_to_s3(self, bucket_name, key, data):
