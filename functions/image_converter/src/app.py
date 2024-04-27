@@ -18,7 +18,7 @@ class Processor(SoswProcessor):
     DEFAULT_CONFIG = {
         'init_clients': ['s3'],
         's3_config':    {
-            'bucket_name': 'test',
+            'bucket_name': 'img-converter-test',
             'path':        '/img',
 
             'image_types': ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'],

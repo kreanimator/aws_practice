@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
-  TestBucket:
+  ImgConverterTestBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: test
+      BucketName: img-converter-test
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
@@ -12,14 +12,14 @@ Resources:
   TestBucketPolicy:
     Type: 'AWS::S3::BucketPolicy'
     Properties:
-      Bucket: !Ref TestBucket
+      Bucket: !Ref ImgConverterTestBucket
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
           - Effect: Deny
             Principal: '*'
             Action: 's3:GetObject'
-            Resource: !Sub 'arn:aws:s3:::${test}/*'
+            Resource: !Sub 'arn:aws:s3:::${ImgConverterTestBucket}/*'
             Condition:
               Bool:
                 aws:SecureTransport: false
@@ -28,8 +28,8 @@ Resources:
             Action:
               - 's3:GetObject'
               - 's3:PutObject'
-            Resource: !Sub 'arn:aws:s3:::${test}/*'
+            Resource: !Sub 'arn:aws:s3:::${ImgConverterTestBucket}/*'
           - Effect: Allow
             Principal: '*'
             Action: 's3:ListBucket'
-            Resource: !Sub 'arn:aws:s3:::${test}'
+            Resource: !Sub 'arn:aws:s3:::${ImgConverterTestBucket}'

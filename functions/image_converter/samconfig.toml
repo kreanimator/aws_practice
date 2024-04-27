@@ -1,0 +1,22 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "dev-image-converter"
+s3_prefix = "dev-image-converter"
+parameter_overrides = "Stage=\"dev\", "
+confirm_changeset = false
+resolve_s3 = true
+region = "us-west-2"
+force-upload = true
+capabilities = "CAPABILITY_IAM"
+
+
+[prod.deploy.parameters]
+stack_name = "image-converter"
+s3_prefix = "image-converter"
+parameter_overrides = "Stage=\"prod\""
+confirm_changeset = true
+resolve_s3 = true
+region = "us-west-2"
+force-upload = true
+capabilities = "CAPABILITY_IAM"

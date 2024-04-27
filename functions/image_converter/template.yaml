@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Export to CSV converter
+
+Parameters:
+  CustomFunctionName:
+    Type: String
+    Default: image_converter_to_webp
+  Stage:
+    Type: String
+    Default: dev
+  BucketName:
+    Type: String
+    Default: img-converter-test
+
+Conditions:
+  isProd: !Equals [ !Ref Stage, prod ]
+
+Resources:
+  ImageConverterToWEBP:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !If [ isProd, !Ref CustomFunctionName, !Sub "${Stage}_${CustomFunctionName}" ]
+      CodeUri: src/
+      Description: Image converter to webp
+      Handler: app.lambda_handler
+      MemorySize: 256
+      PackageType: Zip
+      Runtime: python3.11
+      Timeout: 60
+      Tracing: Active
+#      FunctionUrlConfig:
+##        AuthType: AWS_IAM #For future use
+#        AuthType: NONE
+#        InvokeMode: RESPONSE_STREAM
+
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref BucketName
+      Layers:
+        - !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:sosw:1'
+      Tags:
+        Env: !Ref Stage
