@@ -1,12 +1,11 @@
-import os
 import io
-from PIL import Image
-import boto3
+import os
 
+import boto3
+from PIL import Image
 from aws_lambda_powertools import Logger
 from aws_xray_sdk.core import patch_all
-
-from sosw.app import Processor as SoswProcessor, get_lambda_handler, LambdaGlobals
+from sosw.app import Processor as SoswProcessor, LambdaGlobals, get_lambda_handler
 
 logger = Logger()
 patch_all()
@@ -69,3 +68,7 @@ class Processor(SoswProcessor):
 
     def upload_to_s3(self, bucket_name, key, data):
         self.s3_client.put_object(Bucket=bucket_name, Key=key, Body=data)
+
+
+global_vars = LambdaGlobals()
+lambda_handler = get_lambda_handler(Processor, global_vars)
