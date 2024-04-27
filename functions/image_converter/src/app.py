@@ -11,7 +11,7 @@ from sosw.app import Processor as SoswProcessor, get_lambda_handler, LambdaGloba
 logger = Logger()
 patch_all()
 
-IS_PROD = os.getenv('env') == 'prod'  # TEMPORARY
+IS_PROD = os.getenv('env') == 'prod'
 
 
 class Processor(SoswProcessor):
