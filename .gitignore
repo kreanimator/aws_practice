@@ -22,6 +22,7 @@ var/
 wheels/
 share/python-wheels/
 *.egg-info/
+.venv/
 .installed.cfg
 *.egg
 MANIFEST
@@ -159,4 +160,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 .aws-sam/
-.venv/
+
+/functions/image_converter/.aws-sam/
