@@ -10,6 +10,8 @@ load_dotenv('key.env')
 api_key = os.getenv('OPENAI_API_KEY')
 client = OpenAI(api_key=api_key)
 
+MAX_INPUT_LENGTH = 32
+
 
 def main():
 
@@ -19,17 +21,24 @@ def main():
     args = parser.parse_args()
     user_input = args.input
     print(f"User input: {user_input}")
-    joke_result = generate_joke(user_input)
-    fact_result = generate_fact(user_input)
-    keyword_result = generate_keywords(user_input)
-    print(joke_result)
-    print(fact_result)
-    print(keyword_result)
+    if validate_input(user_input):
+        joke_result = generate_joke(user_input)
+        fact_result = generate_fact(user_input)
+        keyword_result = generate_keywords(user_input)
+        print(f"Joke: {joke_result} \nInteresting fact: {fact_result} \nKeywords: {keyword_result}")
+    else:
+        raise ValueError(f"Input is too long. Must be under {MAX_INPUT_LENGTH} symbols!"
+                         f" Submitted input is {len(user_input)}")
+
+
+def validate_input(prompt: str) -> bool:
+    return len(prompt) <= MAX_INPUT_LENGTH
 
 
 def generate_joke(prompt: str) -> str:
 
     enriched_prompt = f"Generate a joke about {prompt}:"
+    print(enriched_prompt)
     response = client.completions.create(
         model="gpt-3.5-turbo-instruct",
         prompt=enriched_prompt,
@@ -47,6 +56,8 @@ def generate_joke(prompt: str) -> str:
 def generate_fact(prompt: str) -> str:
 
     enriched_prompt = f"Generate a fan fact about {prompt}:"
+    print(enriched_prompt)
+
     response = client.completions.create(
         model="gpt-3.5-turbo-instruct",
         prompt=enriched_prompt,
@@ -64,6 +75,7 @@ def generate_fact(prompt: str) -> str:
 def generate_keywords(prompt: str) -> List[str]:
 
     enriched_prompt = f"Generate related branding keywords for {prompt}:"
+    print(enriched_prompt)
     response = client.completions.create(
         model="gpt-3.5-turbo-instruct",
         prompt=enriched_prompt,
