@@ -50,5 +50,4 @@ async def generate_data_api(prompt: str):
     else:
         raise HTTPException(status_code=400, detail=f"Invalid input length! Should be no more than {MAX_INPUT_LENGTH}")
 
-
 #   uvicorn quip_nugget_api:app --reload

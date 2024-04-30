@@ -30,7 +30,7 @@ def main():
         keyword_result = generate_keywords(user_input)
         print(f"Joke: {joke_result} \nInteresting fact: {fact_result} \nKeywords: {keyword_result}")
     else:
-        raise ValueError(f"Input is too long. Must be under {12} symbols! Submitted input is {len(prompt)}")
+        raise ValueError(f"Input is too long. Must be under {12} symbols! Submitted input is {len(user_input)}")
 
 
 def validate_input(prompt: str) -> bool:
