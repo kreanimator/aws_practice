@@ -38,6 +38,6 @@ Resources:
         - S3CrudPolicy:
             BucketName: !Ref BucketName
       Layers:
-        - !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:sosw:1'
+        - !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layers:sosw:1'
       Tags:
         Env: !Ref Stage

@@ -1,14 +1,17 @@
 import os
+
+from dotenv import load_dotenv
+from openai import OpenAI
 from typing import List
 
-from openai import OpenAI
-from dotenv import load_dotenv
+
 import argparse
 import re
 
 load_dotenv('key.env')
 api_key = os.getenv('OPENAI_API_KEY')
 client = OpenAI(api_key=api_key)
+
 
 MAX_INPUT_LENGTH = 32
 
@@ -27,8 +30,7 @@ def main():
         keyword_result = generate_keywords(user_input)
         print(f"Joke: {joke_result} \nInteresting fact: {fact_result} \nKeywords: {keyword_result}")
     else:
-        raise ValueError(f"Input is too long. Must be under {MAX_INPUT_LENGTH} symbols!"
-                         f" Submitted input is {len(user_input)}")
+        raise ValueError(f"Input is too long. Must be under {12} symbols! Submitted input is {len(prompt)}")
 
 
 def validate_input(prompt: str) -> bool:
@@ -45,12 +47,13 @@ def generate_joke(prompt: str) -> str:
         max_tokens=32
     )
 
-    story_text: str = response.choices[0].text.strip()
-    last_char = story_text[-1]
+    joke_text: str = response.choices[0].text.strip()
+    # joke_text = joke_text.replace('\n', ' ')
+    last_char = joke_text[-1]
     if last_char not in {".", "!", "?"}:
-        story_text += "..."
+        joke_text += "..."
 
-    return story_text
+    return joke_text
 
 
 def generate_fact(prompt: str) -> str:

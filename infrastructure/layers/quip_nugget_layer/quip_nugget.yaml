@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Quip nugget necessary libraries"
+
+Parameters:
+  FileName:
+    Description: Custom name of file to use.
+    Type: String
+    Default: quip.zip
+
+Resources:
+  QuipLayer:
+    Type: "AWS::Lambda::LayerVersion"
+    Description: "sosw, bson, aws_lambda_powertools, aws_xray_sdk, requests, "
+    Properties:
+      CompatibleRuntimes:
+        - python3.10
+        - python3.11
+      Content:
+        S3Bucket: !Sub "quipapp-control-${AWS::AccountId}"
+        S3Key: !Sub "lambda_layers/${FileName}"
+      Description: "quip"
+      LayerName: "quip"
+      LicenseInfo: "MIT"
