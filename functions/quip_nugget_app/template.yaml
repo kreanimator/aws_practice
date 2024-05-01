@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: API Gateway to EventBridge proxy. Translates full events to the EventBus.
+
+Parameters:
+  CustomFunctionName:
+    Type: String
+    Default: quip_nugget_app
+  Stage:
+    Type: String
+    Default: dev
+
+Conditions:
+  isProd: !Equals [ !Ref Stage, prod ]
+
+Resources:
+  LambdaQuipNuggetApp:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !If [ isProd, !Sub "${CustomFunctionName}", !Sub "${Stage}_${CustomFunctionName}" ]
+      CodeUri: src/
+      Description: ApiGW to lambda
+      Handler: app.lambda_handler
+      MemorySize: 256
+      PackageType: Zip
+      Runtime: python3.11
+      Timeout: 3
+      Tracing: Active
+
+      Policies:
+        - EventBridgePutEventsPolicy:
+            EventBusName: default
+        - SNSPublishMessagePolicy:
+            TopicName: web-forms-sosw
+#        - DynamoDBReadPolicy:
+#            TableName: !ImportValue prod-ddb-config
+#            FIXME when the https://github.com/sosw/sosw/issues/284 is solved
+#            TableName: !If [ isProd, !ImportValue prod-ddb-config, !ImportValue dev-ddb-config ]
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:sosw:2"
+      Tags:
+        Env: !Ref Stage
+
+  FunctionResourcePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      Principal: apigateway.amazonaws.com
+      FunctionName: !Ref LambdaWwwGatewayEventBridgeProxy
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:*/*'
+

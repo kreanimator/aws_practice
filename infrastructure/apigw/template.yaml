@@ -1,0 +1,148 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: API Gateway
+
+Parameters:
+  Stage:
+    Type: String
+    Default: prod
+  #  Service:
+  #    Type: String
+  #    Default: apigw2eb
+
+  LambdaFunctionName:
+    Description: "Name of Lambda Function."
+    Type: String
+    Default: 'quip_nugget_app'
+
+Conditions:
+  isProd: !Equals [ !Ref Stage, 'prod' ]
+
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+  # Resource creates an API
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-api.html
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub quip-nugget-app-api-${Stage}
+      ProtocolType: HTTP
+      DisableExecuteApiEndpoint: false
+
+      #      Description: An Amazon API Gateway HTTP API and an AWS Lambda function.
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+        AllowMethods:
+          - GET
+          - OPTIONS
+          - POST
+
+  # Resource creates an API mapping
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-apimapping.html
+  #  HttpApiMapping:
+  #    DependsOn:
+  #      - HttpApiStage
+  #    Type: AWS::ApiGatewayV2::ApiMapping
+  #    Properties:
+  #      ApiId:
+  #        Ref: HttpApi
+  ##      DomainName: !If [ isProd, !Sub "api.${CustomDomainName}", "api-${Stage}.${CustomDomainName}" ]
+  #      DomainName: !Sub api.${CustomDomainName}
+  #      Stage: !Sub ${Stage}
+  #      ApiMappingKey: !Sub ${Service}
+
+  # Resource updates a stage for an API
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-stage.html
+  HttpApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId:
+        Ref: HttpApi
+      StageName: !Sub ${Stage}
+      AutoDeploy: true
+
+  #  # Resource creates a route for an API
+  #  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-route.html
+  HttpApiRouteAppGenerateJoke:
+    DependsOn:
+      - HttpApiIntegrationLambdaProxy
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: HttpApi
+      RouteKey: GET /app/generate_joke
+      Target:
+        Fn::Join:
+          - /
+          - - integrations
+            - Ref: HttpApiIntegrationLambdaProxy
+
+  HttpApiRouteAppGenerateFact:
+    DependsOn:
+      - HttpApiIntegrationLambdaProxy
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: HttpApi
+      RouteKey: GET /app/generate_fact
+      Target:
+        Fn::Join:
+          - /
+          - - integrations
+            - Ref: HttpApiIntegrationLambdaProxy
+
+  HttpApiRouteAppGenerateKeywords:
+    DependsOn:
+      - HttpApiIntegrationLambdaProxy
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: HttpApi
+      RouteKey: GET /app/generate_keywords
+      Target:
+        Fn::Join:
+          - /
+          - - integrations
+            - Ref: HttpApiIntegrationLambdaProxy
+
+  HttpApiRouteAppGenerateData:
+    DependsOn:
+      - HttpApiIntegrationLambdaProxy
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: HttpApi
+      RouteKey: GET /app/generate_data
+      Target:
+        Fn::Join:
+          - /
+          - - integrations
+            - Ref: HttpApiIntegrationLambdaProxy
+
+
+  ### Integrations ###
+  HttpApiIntegrationLambdaProxy:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::If:
+          - isProd
+          - Fn::Sub: arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${LambdaFunctionName}
+          - Fn::Sub: arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${Stage}_${LambdaFunctionName}
+      PayloadFormatVersion: "2.0"
+      TimeoutInMillis: 5000
+
+Outputs:
+  WwwHttpApiId:
+    Description: "ID of API Gateway"
+    Value:
+      Ref: HttpApi
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-id"

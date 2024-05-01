@@ -1,0 +1,20 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "dev-quip-nugget-app-api-gateway"
+resolve_s3 = true
+s3_prefix = "dev-quip-nugget-app-api-gateway"
+region = "us-west-2"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Stage=\"dev\""
+
+[prod.deploy.parameters]
+stack_name = "quip-nugget-app-api-gateway"
+s3_prefix = "quip-nugget-app-api-gateway"
+parameter_overrides = "Stage=\"prod\""
+region = "us-west-2"
+resolve_s3 = true
+confirm_changeset = true
+force-upload = true
+capabilities = "CAPABILITY_IAM"

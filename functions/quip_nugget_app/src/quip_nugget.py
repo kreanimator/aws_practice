@@ -18,7 +18,6 @@ MAX_INPUT_LENGTH = 32
 
 def main():
 
-    print("Running Quip Nugget")
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", "-i", type=str, required=True)
     args = parser.parse_args()
