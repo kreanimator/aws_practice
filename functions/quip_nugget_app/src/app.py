@@ -111,7 +111,7 @@ class Processor(SoswProcessor):
         )
 
         joke_text: str = response.choices[0].text.strip()
-        # joke_text = joke_text.replace('\n', ' ')
+        joke_text = joke_text.replace('\n', ' ')
         last_char = joke_text[-1]
         if last_char not in {".", "!", "?"}:
             joke_text += "..."
