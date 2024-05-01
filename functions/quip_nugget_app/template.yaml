@@ -24,20 +24,23 @@ Resources:
       MemorySize: 256
       PackageType: Zip
       Runtime: python3.11
-      Timeout: 3
+      Timeout: 300
       Tracing: Active
 
       Policies:
-        - EventBridgePutEventsPolicy:
-            EventBusName: default
-        - SNSPublishMessagePolicy:
-            TopicName: web-forms-sosw
+        - SSMParameterReadPolicy:
+            ParameterName: 'OPENAI_API_KEY'
+
+#        - EventBridgePutEventsPolicy:
+#            EventBusName: default
+#        - SNSPublishMessagePolicy:
+#            TopicName: web-forms-sosw
 #        - DynamoDBReadPolicy:
 #            TableName: !ImportValue prod-ddb-config
 #            FIXME when the https://github.com/sosw/sosw/issues/284 is solved
 #            TableName: !If [ isProd, !ImportValue prod-ddb-config, !ImportValue dev-ddb-config ]
       Layers:
-        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:sosw:2"
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:sosw:1"
       Tags:
         Env: !Ref Stage
 
@@ -46,6 +49,6 @@ Resources:
     Properties:
       Action: 'lambda:InvokeFunction'
       Principal: apigateway.amazonaws.com
-      FunctionName: !Ref LambdaWwwGatewayEventBridgeProxy
+      FunctionName: !Ref LambdaQuipNuggetApp
       SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:*/*'
 

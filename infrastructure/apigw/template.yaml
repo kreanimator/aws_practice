@@ -73,7 +73,7 @@ Resources:
     Properties:
       ApiId:
         Ref: HttpApi
-      RouteKey: GET /app/generate_joke
+      RouteKey: ANY /app/generate_joke
       Target:
         Fn::Join:
           - /
@@ -87,7 +87,7 @@ Resources:
     Properties:
       ApiId:
         Ref: HttpApi
-      RouteKey: GET /app/generate_fact
+      RouteKey: ANY /app/generate_fact
       Target:
         Fn::Join:
           - /
@@ -101,7 +101,7 @@ Resources:
     Properties:
       ApiId:
         Ref: HttpApi
-      RouteKey: GET /app/generate_keywords
+      RouteKey: ANY /app/generate_keywords
       Target:
         Fn::Join:
           - /
@@ -115,7 +115,7 @@ Resources:
     Properties:
       ApiId:
         Ref: HttpApi
-      RouteKey: GET /app/generate_data
+      RouteKey: ANY /app/generate_data
       Target:
         Fn::Join:
           - /

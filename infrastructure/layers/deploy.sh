@@ -45,7 +45,7 @@ pip3 install requests -t $NAME/python/
 pip3 install openai -t $NAME/python/
 pip3 install dotenv -t $NAME/python/
 pip3 install fastapi -t $NAME/python/
-from dotenv import load_dotenv
+
 
 if [[ $FORCE_RANDOM_NAME ]]; then
   echo "Generated a random suffix for file name."

@@ -1,8 +1,8 @@
 version = 0.1
 
 [default.deploy.parameters]
-stack_name = "dev-lambda-www-gateway-eventbridge-proxy"
-s3_prefix = "dev-lambda-www-gateway-eventbridge-proxy"
+stack_name = "dev-lambda-quip-nugget-app"
+s3_prefix = "dev-lambda-quip-nugget-app"
 parameter_overrides = "Stage=\"dev\""
 region = "us-west-2"
 resolve_s3 = true
@@ -10,11 +10,10 @@ source = "src/"
 confirm_changeset = false
 force-upload = true
 capabilities = "CAPABILITY_IAM"
-profile = "ngr-926629045956"
 
 [prod.deploy.parameters]
-stack_name = "lambda-www-gateway-eventbridge-proxy"
-s3_prefix = "lambda-www-gateway-eventbridge-proxy"
+stack_name = "lambda-quip-nugget-app"
+s3_prefix = "lambda-quip-nugget-app"
 parameter_overrides = "Stage=\"prod\""
 region = "us-west-2"
 resolve_s3 = true
@@ -22,4 +21,3 @@ source = "src/"
 confirm_changeset = true
 force-upload = true
 capabilities = "CAPABILITY_IAM"
-profile = "ngr-926629045956"
