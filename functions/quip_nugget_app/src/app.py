@@ -4,7 +4,6 @@ import os
 from urllib.parse import parse_qs
 
 import boto3
-# from dotenv import load_dotenv
 from openai import OpenAI
 from typing import List
 from aws_lambda_powertools import Logger
@@ -13,9 +12,6 @@ from sosw.app import Processor as SoswProcessor, LambdaGlobals, get_lambda_handl
 
 import re
 
-# load_dotenv('key.env')
-# api_key = os.getenv('OPENAI_API_KEY')
-# client = OpenAI(api_key=api_key)
 
 MAX_INPUT_LENGTH = 32
 
