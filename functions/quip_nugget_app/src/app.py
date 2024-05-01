@@ -60,20 +60,22 @@ class Processor(SoswProcessor):
 
 
     def generate_response(self, event: dict, prompt: str) -> dict:
+        api_key = self.get_parameter('OPENAI_API_KEY')
+        client = OpenAI(api_key=api_key)
         path_parts = event['rawPath'].split('/')
         path = path_parts[-1]
         result = {}
 
         if path == 'generate_joke':
-            result['joke'] = self.generate_joke(prompt)
+            result['joke'] = self.generate_joke(prompt, client)
         elif path == 'generate_fact':
-            result['fact'] = self.generate_fact(prompt)
+            result['fact'] = self.generate_fact(prompt, client)
         elif path == 'generate_keywords':
-            result['keywords'] = self.generate_keywords(prompt)
+            result['keywords'] = self.generate_keywords(prompt, client)
         elif path == 'generate_data':
-            result['joke'] = self.generate_joke(prompt)
-            result['fact'] = self.generate_fact(prompt)
-            result['keywords'] = self.generate_keywords(prompt)
+            result['joke'] = self.generate_joke(prompt, client)
+            result['fact'] = self.generate_fact(prompt, client)
+            result['keywords'] = self.generate_keywords(prompt, client)
         else:
             return {
                 'statusCode': 404,
@@ -102,9 +104,8 @@ class Processor(SoswProcessor):
         return len(prompt) <= self.config['max_input_length']
 
 
-    def generate_joke(self, prompt: str) -> str:
-        api_key = self.get_parameter('OPENAI_API_KEY')
-        client = OpenAI(api_key=api_key)
+    def generate_joke(self, prompt: str, client) -> str:
+
         enriched_prompt = f"Generate a joke about {prompt}:"
         logger.info(f"Enriched prompt: {enriched_prompt}")
         response = client.completions.create(
@@ -128,9 +129,7 @@ class Processor(SoswProcessor):
         return response['Parameter']['Value']
 
 
-    def generate_fact(self, prompt: str) -> str:
-        api_key = self.get_parameter('OPENAI_API_KEY')
-        client = OpenAI(api_key=api_key)
+    def generate_fact(self, prompt: str, client) -> str:
 
         enriched_prompt = f"Generate a fan fact about {prompt}:"
         logger.info(f"Enriched prompt: {enriched_prompt}")
@@ -148,9 +147,8 @@ class Processor(SoswProcessor):
         return fact_text
 
 
-    def generate_keywords(self, prompt: str) -> List[str]:
-        api_key = self.get_parameter('OPENAI_API_KEY')
-        client = OpenAI(api_key=api_key)
+    def generate_keywords(self, prompt: str, client) -> List[str]:
+
         enriched_prompt = f"Generate related branding keywords for {prompt}:"
         logger.info(f"Enriched prompt: {enriched_prompt}")
         response = client.completions.create(
