@@ -42,12 +42,8 @@ class Processor(SoswProcessor):
         logger.info(f"User input: {user_input}")
         try:
             if self.validate_input(user_input):
-                self.generate_response(event, user_input)
-
-                return {
-                    'statusCode': 200,
-                    'body':       json.dumps({'message': 'Successful'})
-                }
+                result = self.generate_response(event, user_input)
+                return result
         except ValueError as ve:
             return {
                 'statusCode': 400,
