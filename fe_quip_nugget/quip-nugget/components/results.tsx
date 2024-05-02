@@ -6,7 +6,7 @@ interface ResultsProps{
         onBack: any;
     }
 
-const Results: React.FC.ResultsProps = (props) => {
+const Results: React.FC.<ResultsProps> = (props) => {
 
        const keywordsElement = [];
        for (let i = 0; i < props.keywords.length; i++){
