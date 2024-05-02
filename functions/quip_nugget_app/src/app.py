@@ -115,7 +115,7 @@ class Processor(SoswProcessor):
         response = client.completions.create(
             model="gpt-3.5-turbo-instruct",
             prompt=enriched_prompt,
-            max_tokens=32
+            max_tokens=96
         )
 
         joke_text: str = response.choices[0].text.strip()
@@ -158,7 +158,7 @@ class Processor(SoswProcessor):
         response = client.completions.create(
             model="gpt-3.5-turbo-instruct",
             prompt=enriched_prompt,
-            max_tokens=32
+            max_tokens=64
         )
 
         keywords_text = response.choices[0].text.strip()

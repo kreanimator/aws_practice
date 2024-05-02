@@ -1,5 +1,5 @@
 interface FormProps {
-    prompt: str;
+    prompt: string;
     setPrompt: any;
     onSubmit: any;
     isLoading: boolean;
