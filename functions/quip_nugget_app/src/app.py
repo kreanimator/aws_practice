@@ -12,7 +12,6 @@ from sosw.app import Processor as SoswProcessor, LambdaGlobals, get_lambda_handl
 
 import re
 
-
 MAX_INPUT_LENGTH = 32
 
 logger = Logger()
@@ -44,6 +43,9 @@ class Processor(SoswProcessor):
             if self.validate_input(user_input):
                 result = self.generate_response(event, user_input)
                 return result
+            else:
+                input_length = self.config['max_input_length']
+                return f'Your input is more than {input_length}'
         except ValueError as ve:
             return {
                 'statusCode': 400,
@@ -78,18 +80,28 @@ class Processor(SoswProcessor):
 
 
     def get_user_input_from_event(self, event: dict) -> str:
-        body = event.get('body')
-        if body:
-            decoded_body = base64.b64decode(body).decode('utf-8')
-            logger.info(f"Decoded body: {decoded_body}")
-            query_params = parse_qs(decoded_body)
+        query_params = event.get('queryStringParameters')
+        if query_params:
             user_input = query_params.get('user_input', '')
             if user_input:
-                user_input_str = user_input[0]
+                user_input_str = user_input
                 logger.info(f"user_input: {user_input_str}")
                 return user_input_str
         logger.info("user_input is empty")
         return ""
+    # def get_user_input_from_event(self, event: dict) -> str:
+    #     body = event.get('body')
+    #     if body:
+    #         decoded_body = base64.b64decode(body).decode('utf-8')
+    #         logger.info(f"Decoded body: {decoded_body}")
+    #         query_params = parse_qs(decoded_body)
+    #         user_input = query_params.get('user_input', '')
+    #         if user_input:
+    #             user_input_str = user_input[0]
+    #             logger.info(f"user_input: {user_input_str}")
+    #             return user_input_str
+    #     logger.info("user_input is empty")
+    #     return ""
 
 
     def validate_input(self, prompt: str) -> bool:

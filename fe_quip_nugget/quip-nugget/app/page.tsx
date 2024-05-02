@@ -4,8 +4,8 @@ import QuipNugget from "../components/quip_nugget";
 
 export default function Home() {
   return (
-    <main>
-    <div className= {styles.container} >
+    <main class="flex min-h-screen flex-col items-center">
+    <div>
     <QuipNugget />
     </div>
     </main>
