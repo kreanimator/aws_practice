@@ -16,7 +16,7 @@
   }
 }
 html, body{
-    @apply bg-teal-950;
+    @apply bg-cyan-950;
 
 }
 @layer utilities {

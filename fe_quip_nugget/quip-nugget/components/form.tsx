@@ -28,11 +28,11 @@ const Form: React.FC<FormProps> = (props) => {
 
     return (
         <>
-        <div className="mb-6 text-slate-400">
-            <p>
-                Got something on your mind? Share it, and I'll whip up a witty quip just for you!
-            </p>
-         </div>
+            <div className="mb-6 text-slate-400 flex justify-center">
+                <p>
+                    Got something on your mind? Share it, and I'll whip up a witty quip just for you!
+                </p>
+            </div>
             <input
                 className="p-2 w-full rounded-md focus:outline-teal-400 focus:outline text-slate-700"
                 type="text"
