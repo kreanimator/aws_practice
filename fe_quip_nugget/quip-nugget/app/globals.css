@@ -17,7 +17,9 @@
 }
 html, body{
     @apply bg-emerald-950;
-
+}
+.shadowed-text {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 @layer utilities {
   .text-balance {

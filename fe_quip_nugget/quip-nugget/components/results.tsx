@@ -13,7 +13,7 @@ const Results: React.FC<ResultsProps> = (props) => {
             const element = (
               <div
                 key={i}
-                className="bg-gradient-to-r from-emerald-100 to-emerald-400 p-1 text-teal-700 px-2 text-sm rounded-md"
+                className="bg-gradient-to-r from-green-300 to-emerald-400 p-1 text-white shadowed-text px-2 text-sm rounded-md"
 
               >
                 #{props.keywords[i]}
@@ -25,10 +25,10 @@ const Results: React.FC<ResultsProps> = (props) => {
         <div className="flex flex-wrap gap-2">{keywordElements}</div>
         );
 
-       const resultSection = (label: string, body: any) => {
+       const resultSection = (label: string, body: any, color: string) => {
         return (
-          <div className="bg-emerald-700 p-4 my-3 rounded-md">
-            <div className="text-slate-400 text-sm font-bold mb-4">{label}</div>
+          <div className={`${color} p-4 my-3 rounded-md`}>
+            <div className="text-white text-sm font-bold mb-4" >{label}</div>
             <div>{body}</div>
           </div>
         );
@@ -39,11 +39,11 @@ const Results: React.FC<ResultsProps> = (props) => {
                   <div className="mb-6">
                     {resultSection(
                       "Prompt",
-                      <div className="text-lg font-bold">{props.prompt}</div>
+                      <div className="text-lg font-bold">{props.prompt}</div>, "bg-emerald-700"
                     )}
-                    {resultSection("Joke", props.joke)}
-                    {resultSection("Fact", props.fact)}
-                    {resultSection("Keywords", keywordElementsHolder)}
+                    {resultSection("Joke", props.joke, "bg-emerald-700")}
+                    {resultSection("Fact", props.fact, "bg-emerald-700")}
+                    {resultSection("Keywords", keywordElementsHolder, "bg-emerald-700")}
                   </div>
                   <button
                     className="bg-gradient-to-r from-emerald-400
@@ -53,38 +53,6 @@ const Results: React.FC<ResultsProps> = (props) => {
                     Back
                   </button>
                 </>
-//         <>
-//             <div>
-//                 <div>
-//                     <b>Prompt</b>
-//                 </div>
-//                 <div>
-//                     {props.prompt}
-//                 </div>
-//                 <div>
-//                     <b>Joke</b>
-//                 </div>
-//                 <div>
-//                     {props.joke}
-//                 </div>
-//                 <div>
-//                     <b>Fact</b>
-//                 </div>
-//                 <div>
-//                     {props.fact}
-//                 </div>
-//                 <div>
-//                     <b>Keywords</b>
-//                 </div>
-//                 <div>
-//                     {keywordsElement}
-//                 </div>
-//             </div>
-//             <button
-//              className="bg-gradient-to-r from-teal-400
-//         to-blue-500 disabled:opacity-50 w-full p-2 rounded-md text-lg"
-//              onClick={props.onBack}>Back</button>
-//         </>
     );
 };
 
