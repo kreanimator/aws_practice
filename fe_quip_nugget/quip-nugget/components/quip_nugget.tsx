@@ -63,11 +63,11 @@ const QuipNugget: React.FC = () => {
 
 
     return(
-    <div className="h-screen flex">
+    <div className="h-screen flex justify-center items-center">
         <div className="max-w-md m-auto p-2">
             <div className="bg-slate-900 p-6 rounded-md text-slate-300">
             <div className="text-center my-6">
-                <Image src={logo} width={64} height={64} alt="Quip Nugget logo"/>
+                <Image src={logo} width={64} height={64} alt="Quip Nugget logo" style={{ display: 'block', margin: '0 auto' }} />
                 <h1 className={gradientTextStyle+ " text-3xl font-light w-fit mx-auto"}>Quip Nugget</h1>
 
                 <div className={gradientTextStyle}>Where Wit Takes Flight from Your Fingertips!</div>
@@ -78,4 +78,5 @@ const QuipNugget: React.FC = () => {
     </div>
     )
     }
+
 export default QuipNugget;
