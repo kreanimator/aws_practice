@@ -13,7 +13,8 @@ const Results: React.FC<ResultsProps> = (props) => {
             const element = (
               <div
                 key={i}
-                className="bg-teal-200 p-1 text-teal-700 px-2 text-sm rounded-md"
+                className="bg-gradient-to-r from-emerald-100 to-emerald-400 p-1 text-teal-700 px-2 text-sm rounded-md"
+
               >
                 #{props.keywords[i]}
               </div>
