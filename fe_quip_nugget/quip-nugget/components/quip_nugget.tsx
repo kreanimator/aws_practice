@@ -74,8 +74,12 @@ const QuipNugget: React.FC = () => {
             </div>
                 {displayedElement}
             </div>
+            <footer class="text-gray-500 text-center my-6">project by <a href="https://github.com/kreanimator" class="underline">kreanimator</a></footer>
+            <footer class="text-gray-500 text-center my-6">powered by <a href="https://docs.sosw.app/" class="underline">SOSW</a></footer>
+
          </div>
     </div>
+
     )
     }
 
