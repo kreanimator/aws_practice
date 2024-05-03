@@ -30,7 +30,7 @@ const Form: React.FC<FormProps> = (props) => {
         <>
         <div className="mb-6 text-slate-400">
             <p>
-                What's on your mind? Tell me and I'll try to make a joke for you!
+                Got something on your mind? Share it, and I'll whip up a witty quip just for you!
             </p>
          </div>
             <input
