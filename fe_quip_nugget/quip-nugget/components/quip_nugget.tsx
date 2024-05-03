@@ -6,7 +6,6 @@ import { useState } from "react";
 import Image from "next/image";
 import logo from "../public/gold-nugget.png";
 
-
 const QuipNugget: React.FC = () => {
     const CHARACTER_LIMIT: number = 32;
     const ENDPOINT: string = "https://gvz6ywtue1.execute-api.us-west-2.amazonaws.com/dev/app/generate_data";
