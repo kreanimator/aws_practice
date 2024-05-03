@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import styles from "./Home.module.css";
 import QuipNugget from "../components/quip_nugget";
 
