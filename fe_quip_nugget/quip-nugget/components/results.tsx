@@ -18,7 +18,7 @@ const Results: React.FC<ResultsProps> = (props) => {
                 className="bg-gradient-to-r from-green-300 to-emerald-400 p-1 text-white shadowed-text px-2 text-sm rounded-md"
 
               >
-                {props.keywords[i]}
+                #{props.keywords[i]}
               </div>
             );
             keywordElements.push(element);
