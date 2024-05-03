@@ -9,6 +9,9 @@ Parameters:
   Stage:
     Type: String
     Default: dev
+  CustomTableName:
+    Type: String
+    Default: quip_nugget_data_analytics
 
 Conditions:
   isProd: !Equals [ !Ref Stage, prod ]
@@ -30,6 +33,10 @@ Resources:
       Policies:
         - SSMParameterReadPolicy:
             ParameterName: 'OPENAI_API_KEY'
+        - SNSPublishMessagePolicy:
+            TopicName: !If [ isProd, "quip-nugget-analytics", !Sub "${Stage}-quip-nugget-analytics" ]
+        - DynamoDBCrudPolicy:
+            TableName: !If [ isProd, !Sub "${CustomTableName}", !Sub "${Stage}_${CustomTableName}" ]
 
 #        - EventBridgePutEventsPolicy:
 #            EventBusName: default

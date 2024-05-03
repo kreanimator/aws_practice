@@ -1,16 +1,22 @@
 import base64
 import json
 import os
+import uuid
+from datetime import datetime
 from urllib.parse import parse_qs
 
 import boto3
 from openai import OpenAI
-from typing import List
+from typing import List, Dict
 from aws_lambda_powertools import Logger
 from aws_xray_sdk.core import patch_all
 from sosw.app import Processor as SoswProcessor, LambdaGlobals, get_lambda_handler
 
 import re
+
+from sosw.components.dynamo_db import DynamoDbClient
+from sosw.components.helpers import recursive_matches_extract
+from sosw.components.sns import SnsManager
 
 MAX_INPUT_LENGTH = 32
 
@@ -23,25 +29,44 @@ IS_PROD = os.getenv('env') == 'prod'
 class Processor(SoswProcessor):
     DEFAULT_CONFIG = {
         'init_clients':     ['ssm'],
+        'dynamo_db_config': {
+            'table_name': 'dev_quip_nugget_data_analytics',
+            'row_mapper': {
+                'id':          'S',
+                'prompt':      'S',
+                'created_at':  'N',
+                'usage_count': 'S',
+            },
+            'required_fields': ['id', 'prompt', 'created_at'],
+        },
         'max_input_length': 32,
         'path_prefix':      '/prod',
+        'sns_config': {
+            'recipient': '',  # FIXME Hardcoded
+            'subject':   'Day analytics',
+        },
+        'fields_to_extract': ['queryStringParameters.user_input', 'requestContext.time', 'detail.meta'],
 
     }
 
     ssm_client: boto3.client = None
-
+    dynamo_db_client: DynamoDbClient = None
+    sns_client: SnsManager = None
 
     def get_config(self, name):
         pass
 
 
     def __call__(self, event):
-
         user_input = self.get_user_input_from_event(event)
         logger.info(f"User input: {user_input}")
         try:
             if self.validate_input(user_input):
                 result = self.generate_response(event, user_input)
+                # self.find_prompt(user_input)
+                # if not self.find_prompt(user_input):
+                #     response = self.make_entry_from_event(event)
+                #     self.send_event_to_ddb(response)
                 return result
             else:
                 input_length = self.config['max_input_length']
@@ -89,6 +114,8 @@ class Processor(SoswProcessor):
                 return user_input_str
         logger.info("user_input is empty")
         return ""
+
+
     # def get_user_input_from_event(self, event: dict) -> str:
     #     body = event.get('body')
     #     if body:
@@ -126,6 +153,27 @@ class Processor(SoswProcessor):
 
         return joke_text
 
+
+    def make_entry_from_event(self, event):
+
+        rec_id = str(uuid.uuid4())
+
+        event_time = event.get('requestContext', {}).get('time')
+        created_at = datetime.strptime(event_time, "%d/%b/%Y:%H:%M:%S %z").timestamp()
+
+        user_input = event.get('queryStringParameters', {}).get('user_input')
+        meta = event.get('detail', {}).get('meta')
+
+        entry = {
+            'id':         rec_id,
+            'created_at': created_at,
+            'user_input': user_input,
+            'meta':       meta
+        }
+
+        # Validate and return the entry
+        entry = self.validate_entry(entry)
+        return entry
 
     def get_parameter(self, parameter_name):
         response = self.ssm_client.get_parameter(Name=parameter_name, WithDecryption=True)
@@ -168,6 +216,42 @@ class Processor(SoswProcessor):
         keywords_list = [k.lower() for k in keywords_list]
 
         return keywords_list
+
+
+    def find_prompt(self, user_input: str) -> bool:
+        table_name = self.config['dynamo_db_config']['table_name']
+
+        keys = {'user_input': user_input}
+        comparisons = {'user_input': '='}
+
+        result = self.dynamo_db_client.get_by_query(keys=keys, table_name=table_name, comparisons=comparisons)
+
+        if result:
+            usage_count = int(result.get('usage_count', 0))
+            usage_count += 1
+            result['usage_count'] = usage_count
+            self.send_event_to_ddb(result)
+
+        return bool(result)
+
+
+    def send_event_to_sns(self, event):
+        logger.info("Sending to SNS event: %s", event)
+        self.sns_client.send_message(message=json.dumps(event), forse_commit=True)
+
+
+    def send_event_to_ddb(self, entry):
+        try:
+            # Put the row into DynamoDB
+            self.dynamo_db_client.put(entry)
+            logger.info("Successfully inserted item into DynamoDB: %s", entry['id'])
+        except Exception as e:
+            logger.critical(e)
+
+
+    def validate_entry(self, entry):
+        logger.info(entry)
+        return entry
 
 
 global_vars = LambdaGlobals()

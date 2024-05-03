@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Quip Nugget analytics table
+
+Parameters:
+  CustomTableName:
+    Type: String
+    Default: quip_nugget_data_analytics
+  Stage:
+    Type: String
+    Default: prod
+
+
+Conditions:
+  isProd: !Equals [ !Ref Stage, 'prod' ]
+
+Resources:
+  SoswFormRecordsDDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !If [ isProd, !Sub "${CustomTableName}", !Sub "${Stage}_${CustomTableName}" ]
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "user_input"
+          AttributeType: "S"
+        - AttributeName: "created_at"
+          AttributeType: "N"
+
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+        - AttributeName: "user_input"
+          KeyType: "RANGE"
+
+
+#      GlobalSecondaryIndexes:
+#        - IndexName: "form"
+#          KeySchema:
+#            - AttributeName: "form_id"
+#              KeyType: "HASH"
+#            - AttributeName: "created_at"
+#              KeyType: "RANGE"
+#          Projection:
+#            NonKeyAttributes:
+#              - "name"
+#              - "email"
+#              - "phone"
+#              - "user_id"
+#            ProjectionType: "INCLUDE"
+#      StreamSpecification:
+#        StreamViewType: "NEW_AND_OLD_IMAGES"
+
+#Outputs:
+#  TableStreamArn:
+#    Value: !GetAtt SoswFormRecordsDDBTable.StreamArn
+#    Export:
+#      Name: StreamArn

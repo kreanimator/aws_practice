@@ -1,0 +1,21 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "dev-ddb-quip-nugget-data-analytics"
+resolve_s3 = true
+s3_prefix = "dev-ddb-quip-nugget-data-analytics"
+region = "us-west-2"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Stage=\"dev\""
+
+
+[prod.deploy.parameters]
+stack_name = "ddb-quip-nugget-data-analytics"
+s3_prefix = "ddb-quip-nugget-data-analytics"
+parameter_overrides = "Stage=\"prod\""
+region = "us-west-2"
+resolve_s3 = true
+confirm_changeset = true
+force-upload = true
+capabilities = "CAPABILITY_IAM"
