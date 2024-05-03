@@ -22,7 +22,7 @@ function Share({description}: ShareProps) {
     <div className="flex flex-col justify-center items-center pb-3">
       <div className="flex space-x-4">
         {/* Facebook */}
-        <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank">
+        <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}&text=${encodeURI(description)}`} target="_blank">
           <svg className="share-icon" xmlns="http://www.w3.org/2000/svg" style={{ width: 30 }} viewBox="0 0 512 512" aria-label="fb" role="img" fill="#047857"><path d="m375.14,288l14.22,-92.66l-88.91,0l0,-60.13c0,-25.35 12.42,-50.06 52.24,-50.06l40.42,0l0,-78.89s-36.68,-6.26 -71.75,-6.26c-73.22,0 -121.08,44.38 -121.08,124.72l0,70.62l-81.39,0l0,92.66l81.39,0l0,224l100.17,0l0,-224l74.69,0z"></path></svg>
         </a>
 
@@ -32,7 +32,7 @@ function Share({description}: ShareProps) {
         </a>
 
         {/* Linkedin */}
-        <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${url}`} target="_blank">
+        <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${url}&text=${encodeURI(description)}`} target="_blank">
           <svg className="share-icon" xmlns="http://www.w3.org/2000/svg" style={{ width: 30 }} viewBox="0 0 512 512" aria-label="ln" role="img" fill="#047857"><path d="m132.28,479.99501l-92.88,0l0,-299.1l92.88,0l0,299.1zm-46.49,-339.9c-29.7,0 -53.79,-24.6 -53.79,-54.3a53.79,53.79 0 0 1 107.58,0c0,29.7 -24.1,54.3 -53.79,54.3zm394.11,339.9l-92.68,0l0,-145.6c0,-34.7 -0.7,-79.2 -48.29,-79.2c-48.29,0 -55.69,37.7 -55.69,76.7l0,148.1l-92.78,0l0,-299.1l89.08,0l0,40.8l1.3,0c12.4,-23.5 42.69,-48.3 87.88,-48.3c94,0 111.28,61.9 111.28,142.3l0,164.3l-0.1,0z"></path></svg>
         </a>
         {/* Linkedin */}

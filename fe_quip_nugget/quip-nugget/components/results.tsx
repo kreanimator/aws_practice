@@ -39,7 +39,6 @@ const Results: React.FC<ResultsProps> = (props) => {
           const shareContent = `Check out this funny prompt: ${props.prompt}\n\nCheck out this joke: ${props.joke}\n\nCheck out this fun fact: ${props.fact}`;
 
 
-
        return (
                <>
                   <div className="mb-6">
@@ -52,6 +51,7 @@ const Results: React.FC<ResultsProps> = (props) => {
                     {resultSection("Keywords", keywordElementsHolder, "bg-emerald-700")}
                   </div>
                   <Share description={shareContent} />
+
                   <button
                     className="bg-gradient-to-r from-emerald-400
                     to-emerald-800 disabled:opacity-50 w-full p-2 rounded-md text-lg"
