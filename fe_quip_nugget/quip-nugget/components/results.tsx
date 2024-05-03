@@ -36,7 +36,7 @@ const Results: React.FC<ResultsProps> = (props) => {
         );
         };
 
-          const shareContent = `Check out this funny prompt: ${props.prompt}\n\nCheck out this joke: ${props.joke}\n\nCheck out this fun fact: ${props.fact}`;
+          const shareContent = `Check out this joke: ${props.joke}\n\nCheck out this fun fact: ${props.fact} \n\n${props.keywords}`;
 
 
        return (
