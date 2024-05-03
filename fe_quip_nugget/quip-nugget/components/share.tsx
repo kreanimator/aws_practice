@@ -22,7 +22,8 @@ function Share({description}: ShareProps) {
     <div className="flex flex-col justify-center items-center pb-3">
       <div className="flex space-x-4">
         {/* Facebook */}
-        <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}&text=${encodeURI(description)}`} target="_blank">
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&text=${encodeURIComponent(description)}`} target="_blank">
+
           <svg className="share-icon" xmlns="http://www.w3.org/2000/svg" style={{ width: 30 }} viewBox="0 0 512 512" aria-label="fb" role="img" fill="#047857"><path d="m375.14,288l14.22,-92.66l-88.91,0l0,-60.13c0,-25.35 12.42,-50.06 52.24,-50.06l40.42,0l0,-78.89s-36.68,-6.26 -71.75,-6.26c-73.22,0 -121.08,44.38 -121.08,124.72l0,70.62l-81.39,0l0,92.66l81.39,0l0,224l100.17,0l0,-224l74.69,0z"></path></svg>
         </a>
 
