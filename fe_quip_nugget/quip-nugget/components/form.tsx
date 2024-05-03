@@ -49,7 +49,7 @@ const Form: React.FC<FormProps> = (props) => {
         to-emerald-800 disabled:opacity-50 w-full p-2 rounded-md text-lg"
              onClick={props.onSubmit}
              disabled={props.isLoading || !isPromptValid}>
-             Submit</button>
+             Hit me with a Quip Nugget!</button>
         </>
     );
 };

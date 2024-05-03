@@ -69,7 +69,7 @@ const QuipNugget: React.FC = () => {
                 <Image src={logo} width={64} height={64} alt="Quip Nugget logo" style={{ display: 'block', margin: '0 auto' }} />
                 <h1 className={gradientTextStyle+ " text-3xl font-light w-fit mx-auto"}>Quip Nugget</h1>
 
-                <div className={gradientTextStyle}>Where Wit Takes Flight from Your Fingertips!</div>
+                <div className={gradientTextStyle}>Where wit takes flight from your fingertips!</div>
             </div>
                 {displayedElement}
             </div>

@@ -28,7 +28,7 @@ const Results: React.FC<ResultsProps> = (props) => {
        const resultSection = (label: string, body: any, color: string) => {
         return (
           <div className={`${color} p-4 my-3 rounded-md`}>
-            <div className="text-white text-sm font-bold mb-4" >{label}</div>
+            <div className="text-white text-sm font-bold mb-1" >{label}</div>
             <div>{body}</div>
           </div>
         );
@@ -38,11 +38,11 @@ const Results: React.FC<ResultsProps> = (props) => {
                <>
                   <div className="mb-6">
                     {resultSection(
-                      "Prompt",
+                      "Your funny input",
                       <div className="text-lg font-bold">{props.prompt}</div>, "bg-emerald-700"
                     )}
                     {resultSection("Joke", props.joke, "bg-emerald-700")}
-                    {resultSection("Fact", props.fact, "bg-emerald-700")}
+                    {resultSection("Funfact", props.fact, "bg-emerald-700")}
                     {resultSection("Keywords", keywordElementsHolder, "bg-emerald-700")}
                   </div>
                   <button
@@ -50,7 +50,7 @@ const Results: React.FC<ResultsProps> = (props) => {
         to-emerald-800 disabled:opacity-50 w-full p-2 rounded-md text-lg"
                     onClick={props.onBack}
                   >
-                    Back
+                    New joke
                   </button>
                 </>
     );
