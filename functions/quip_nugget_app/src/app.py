@@ -16,7 +16,6 @@ import re
 
 from sosw.components.dynamo_db import DynamoDbClient
 from sosw.components.helpers import recursive_matches_extract
-from sosw.components.sns import SnsManager
 
 MAX_INPUT_LENGTH = 32
 
@@ -28,7 +27,7 @@ IS_PROD = os.getenv('env') == 'prod'
 
 class Processor(SoswProcessor):
     DEFAULT_CONFIG = {
-        'init_clients':     ['ssm', 'DynamoDb', 'sns'],
+        'init_clients':     ['ssm', 'DynamoDb'],
         'dynamo_db_config': {
             'table_name': 'dev_quip_nugget_data_analytics',
             'row_mapper': {
@@ -41,17 +40,12 @@ class Processor(SoswProcessor):
         },
         'max_input_length': 32,
         'path_prefix':      '/prod',
-        'sns_config': {
-            'recipient': 'arn:aws:sns:us-west-2:992382783020:quip_nugget_app',  # FIXME Hardcoded
-            'subject':   'Day analytics',
-        },
         'fields_to_extract': ['queryStringParameters.user_input', 'requestContext.time', 'detail.meta'],
 
     }
 
     ssm_client: boto3.client = None
     dynamo_db_client: DynamoDbClient = None
-    sns_client: SnsManager = None
 
     def get_config(self, name):
         pass

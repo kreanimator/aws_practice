@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: Collecting data from DDB and sends to sns
+Parameters:
+  CustomFunctionName:
+    Type: String
+    Default: quip_nugget_collect_day_analytics
+  Stage:
+    Type: String
+    Default: dev
+  CustomTableName:
+    Type: String
+    Default: quip_nugget_data_analytics
+
+Conditions:
+  isProd: !Equals [ !Ref Stage, prod ]
+
+Resources:
+  LambdaQuipNuggetAnalytics:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !If [ isProd, !Sub "${CustomFunctionName}", !Sub "${Stage}_${CustomFunctionName}" ]
+      CodeUri: src/
+      Description: DDb to sns
+      Handler: app.lambda_handler
+      MemorySize: 256
+      PackageType: Zip
+      Runtime: python3.11
+      Timeout: 300
+      Tracing: Active
+
+      Policies:
+
+        - SNSPublishMessagePolicy:
+            TopicName: "quip_nugget_app"
+        - DynamoDBCrudPolicy:
+            TableName: !If [ isProd, !Sub "${CustomTableName}", !Sub "${Stage}_${CustomTableName}" ]
+
+      Layers:
+        - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:sosw:1"
+      Tags:
+        Env: !Ref Stage
+
+
+
