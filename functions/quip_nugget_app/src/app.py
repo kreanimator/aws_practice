@@ -28,7 +28,7 @@ IS_PROD = os.getenv('env') == 'prod'
 
 class Processor(SoswProcessor):
     DEFAULT_CONFIG = {
-        'init_clients':     ['ssm', 'DynamoDb'],
+        'init_clients':     ['ssm', 'DynamoDb', 'sns'],
         'dynamo_db_config': {
             'table_name': 'dev_quip_nugget_data_analytics',
             'row_mapper': {
@@ -42,7 +42,7 @@ class Processor(SoswProcessor):
         'max_input_length': 32,
         'path_prefix':      '/prod',
         'sns_config': {
-            'recipient': '',  # FIXME Hardcoded
+            'recipient': 'arn:aws:sns:us-west-2:992382783020:quip_nugget_app',  # FIXME Hardcoded
             'subject':   'Day analytics',
         },
         'fields_to_extract': ['queryStringParameters.user_input', 'requestContext.time', 'detail.meta'],

@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SNS
+
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+  # Resource creates an SNS
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/AWS_SNS.html
+  QuipNuggetSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "quip_nugget_app"
+
+  MySubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: backin.v@gmail.com
+      Protocol: email
+      TopicArn: !Ref 'QuipNuggetSNSTopic'
