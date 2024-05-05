@@ -37,15 +37,8 @@ Resources:
             TopicName: !If [ isProd, "quip-nugget-analytics", !Sub "${Stage}-quip-nugget-analytics" ]
         - DynamoDBCrudPolicy:
             TableName: !If [ isProd, !Sub "${CustomTableName}", !Sub "${Stage}_${CustomTableName}" ]
-
 #        - EventBridgePutEventsPolicy:
 #            EventBusName: default
-#        - SNSPublishMessagePolicy:
-#            TopicName: web-forms-sosw
-#        - DynamoDBReadPolicy:
-#            TableName: !ImportValue prod-ddb-config
-#            FIXME when the https://github.com/sosw/sosw/issues/284 is solved
-#            TableName: !If [ isProd, !ImportValue prod-ddb-config, !ImportValue dev-ddb-config ]
       Layers:
         - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:sosw:1"
       Tags:
