@@ -28,7 +28,7 @@ const QuipNugget: React.FC = () => {
         // Set timeout value in milliseconds (e.g., 10 seconds)
         const timeout = 10000;
 
-        fetch(`${ENDPOINT}?user_input=${prompt}`, { timeout })
+        fetch(`${ENDPOINT}?user_input=${prompt}`, { timeout: timeout } as any)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error("Network response was not ok");
@@ -42,6 +42,7 @@ const QuipNugget: React.FC = () => {
                 setIsLoading(false);
             });
     };
+
 
 
     const onResult = (data: any) => {
