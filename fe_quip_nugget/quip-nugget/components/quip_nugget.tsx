@@ -24,10 +24,15 @@ const QuipNugget: React.FC = () => {
     const onSubmit = async () => {
         console.log("Submitting: " + prompt);
         setIsLoading(true);
-        const requestOptions: RequestInit = {
-            timeout: 10000, // Timeout in milliseconds (10 seconds in this case)
-        };
-        fetch(`${ENDPOINT}?user_input=${prompt}`, requestOptions)
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => {
+                reject(new Error('Request timed out'));
+            }, 10000);
+        });
+        Promise.race([
+            fetch(`${ENDPOINT}?user_input=${prompt}`),
+            timeoutPromise
+        ])
             .then((res) => {
                 if (!res.ok) {
                     throw new Error("Network response was not ok");
@@ -41,6 +46,7 @@ const QuipNugget: React.FC = () => {
                 setIsLoading(false);
             });
     };
+
 
     const onResult = (data: any) => {
         console.log("Received data:", data);
