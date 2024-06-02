@@ -16,6 +16,7 @@ import re
 
 from sosw.components.dynamo_db import DynamoDbClient
 from sosw.components.helpers import recursive_matches_extract
+__author__ = "Valentin Bakin"
 
 MAX_INPUT_LENGTH = 32
 

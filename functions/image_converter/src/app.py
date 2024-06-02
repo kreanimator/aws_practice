@@ -7,6 +7,8 @@ from aws_lambda_powertools import Logger
 from aws_xray_sdk.core import patch_all
 from sosw.app import Processor as SoswProcessor, LambdaGlobals, get_lambda_handler
 
+__author__ = "Valentin Bakin"
+
 logger = Logger()
 patch_all()
 

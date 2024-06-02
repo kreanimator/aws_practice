@@ -1,5 +1,5 @@
 import React from "react"
-
+__author__ = "Valentin Bakin"
 
 interface ShareProps {
   description: string
