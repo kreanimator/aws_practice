@@ -15,36 +15,39 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-html, body{
-    @apply bg-emerald-950;
+
+html, body {
+  @apply bg-emerald-950;
 }
+
 .shadowed-text {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+
+.text-balance {
+  text-wrap: balance;
+}
 
 .button.loading {
-    cursor: not-allowed;
-    pointer-events: none; /* Disable clicking while loading */
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .button.loading::after {
-    content: "";
-    display: inline-block;
-    width: 0.8em;
-    height: 0.8em;
-    margin-left: 8px;
-    border: 2px solid transparent;
-    border-top-color: #000;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite; /* Rotate the circle */
+  content: "";
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  margin-left: 8px;
+  border: 2px solid transparent;
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite; /* Rotate the circle */
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
+
