@@ -24,9 +24,9 @@ const QuipNugget: React.FC = () => {
         .then(onResult);
         }
     const onResult = (data: any) => {
-        setJoke(data.joke || ""); // Set default values if the fields are undefined
-        setFact(data.fact || "");
-        setKeywords(data.keywords || []);
+        setJoke(data.joke); // Set default values if the fields are undefined
+        setFact(data.fact);
+        setKeywords(data.keywords || ["Something went wrong!"]);
         setHasResult(true);
         setIsLoading(false);
         }
