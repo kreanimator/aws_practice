@@ -22,31 +22,26 @@ const QuipNugget: React.FC = () => {
     }, []);
 
     const onSubmit = async () => {
-    console.log("Submitting: " + prompt);
-    setIsLoading(true);
-    const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => {
-            reject(new Error('Request timed out'));
-        }, 10000);
-    });
-    Promise.race([
-        fetch(`${ENDPOINT}?user_input=${prompt}`),
-        timeoutPromise
-    ])
-        .then((res: Response) => {
-            if (!res.ok) {
-                throw new Error("Network response was not ok");
-                console.log("Response status:", res.status);
-            }
-            return res.json();
-        })
-        .then(onResult)
-        .catch((error) => {
-            console.error("Error fetching data:", error);
-            setIsLoading(false);
-        });
-    };
+        console.log("Submitting: " + prompt);
+        setIsLoading(true);
 
+        // Set timeout value in milliseconds (e.g., 10 seconds)
+        const timeout = 10000;
+
+        fetch(`${ENDPOINT}?user_input=${prompt}`, { timeout })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Network response was not ok");
+                    console.log("Response status:", res.status);
+                }
+                return res.json();
+            })
+            .then(onResult)
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+                setIsLoading(false);
+            });
+    };
 
 
     const onResult = (data: any) => {
