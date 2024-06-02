@@ -28,7 +28,7 @@ const Form: React.FC<FormProps> = (props) => {
         <div className="relative">
             {props.isLoading && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                    <PacmanLoader color="#36d7b7" loading={props.isLoading} height={6} width={100} />
+                    <PacmanLoader color="#36d7b7" loading={props.isLoading}/>
                 </div>
             )}
             <div className="mb-6 text-slate-400 flex justify-center">
