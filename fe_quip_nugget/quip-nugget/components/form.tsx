@@ -45,11 +45,12 @@ const Form: React.FC<FormProps> = (props) => {
             <div>{props.prompt.length}/{props.characterLimit}</div>
             </div>
             <button
-            className="bg-gradient-to-r from-emerald-400
-        to-emerald-800 disabled:opacity-50 w-full p-2 rounded-md text-lg"
-             onClick={props.onSubmit}
-             disabled={props.isLoading || !isPromptValid}>
-             Hit me with a Quip Nugget!</button>
+                className={`bg-gradient-to-r from-emerald-400 to-emerald-800 w-full p-2 rounded-md text-lg
+                ${props.isLoading || !isPromptValid ? 'disabled:opacity-50 cursor-not-allowed' : ''}`}
+                onClick={props.onSubmit}
+                disabled={props.isLoading || !isPromptValid}>
+                {props.isLoading ? "Generating..." : "Hit me with a Quip Nugget!"}
+            </button>
         </>
     );
 };
