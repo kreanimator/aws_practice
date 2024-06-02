@@ -16,6 +16,7 @@ import re
 
 from sosw.components.dynamo_db import DynamoDbClient
 from sosw.components.helpers import recursive_matches_extract
+
 __author__ = "Valentin Bakin"
 
 MAX_INPUT_LENGTH = 32
@@ -28,25 +29,26 @@ IS_PROD = os.getenv('env') == 'prod'
 
 class Processor(SoswProcessor):
     DEFAULT_CONFIG = {
-        'init_clients':     ['ssm', 'DynamoDb'],
-        'dynamo_db_config': {
-            'table_name': 'dev_quip_nugget_data_analytics',
-            'row_mapper': {
+        'init_clients':      ['ssm', 'DynamoDb'],
+        'dynamo_db_config':  {
+            'table_name':      'dev_quip_nugget_data_analytics',
+            'row_mapper':      {
                 'id':          'S',
-                'prompt':      'S',
+                'user_input':  'S',
                 'created_at':  'N',
                 'usage_count': 'N',
             },
-            'required_fields': ['id', 'prompt', 'created_at'],
+            'required_fields': ['id', 'user_input', 'created_at'],
         },
-        'max_input_length': 32,
-        'path_prefix':      '/prod',
+        'max_input_length':  32,
+        'path_prefix':       '/prod',
         'fields_to_extract': ['queryStringParameters.user_input', 'requestContext.time', 'detail.meta'],
 
     }
 
     ssm_client: boto3.client = None
     dynamo_db_client: DynamoDbClient = None
+
 
     def get_config(self, name):
         pass
@@ -58,9 +60,10 @@ class Processor(SoswProcessor):
         try:
             if self.validate_input(user_input):
                 result = self.generate_response(event, user_input)
+                logger.info(f"Result: {result}")
                 if result:
                     response = self.make_entry_from_event(event)
-                    self.find_prompt(response)
+                    self.find_prompt(response, result)
 
                 return result
             else:
@@ -111,21 +114,6 @@ class Processor(SoswProcessor):
         return ""
 
 
-    # def get_user_input_from_event(self, event: dict) -> str:
-    #     body = event.get('body')
-    #     if body:
-    #         decoded_body = base64.b64decode(body).decode('utf-8')
-    #         logger.info(f"Decoded body: {decoded_body}")
-    #         query_params = parse_qs(decoded_body)
-    #         user_input = query_params.get('user_input', '')
-    #         if user_input:
-    #             user_input_str = user_input[0]
-    #             logger.info(f"user_input: {user_input_str}")
-    #             return user_input_str
-    #     logger.info("user_input is empty")
-    #     return ""
-
-
     def validate_input(self, prompt: str) -> bool:
         return len(prompt) <= self.config['max_input_length']
 
@@ -160,15 +148,18 @@ class Processor(SoswProcessor):
         meta = event.get('requestContext', {}).get('http')
 
         entry = {
-            'id':         rec_id,
-            'created_at': created_at,
-            'user_input': user_input,
+            'id':          rec_id,
+            'created_at':  created_at,
+            'user_input':  user_input,
             'usage_count': 1,
-            'meta':       meta
+            'meta':        meta,
+            'jokes':       [],
+            'facts':       []
         }
 
         entry = self.validate_entry(entry)
         return entry
+
 
     def get_parameter(self, parameter_name):
         response = self.ssm_client.get_parameter(Name=parameter_name, WithDecryption=True)
@@ -213,7 +204,7 @@ class Processor(SoswProcessor):
         return keywords_list
 
 
-    def find_prompt(self, entry: dict) -> None:
+    def find_prompt(self, entry: dict, response: dict) -> None:
         user_input = entry.get('user_input')
 
         if user_input:
@@ -222,19 +213,27 @@ class Processor(SoswProcessor):
             keys = {'user_input': user_input}
             comparisons = {'user_input': '='}
 
-            result = self.dynamo_db_client.get_by_query(keys=keys, table_name=table_name, comparisons=comparisons,
-                                                        index_name=index_name)
-            logger.debug(f"Prompt result: {result}")
-            if result:
-                logger.debug("Found existing entry by user_input: %s", result)
-                existing_entry = result[0]
+            db_result = self.dynamo_db_client.get_by_query(keys=keys, table_name=table_name, comparisons=comparisons,
+                                                           index_name=index_name)
+            logger.debug(f"Prompt result: {db_result}")
+            if db_result:
+                logger.debug("Found existing entry by user_input: %s", db_result)
+                existing_entry = db_result[0]
                 usage_count = int(existing_entry.get('usage_count', 0))
                 usage_count += 1
                 existing_entry['usage_count'] = usage_count
+
+                logger.info(f"Result data: {response}")
+                if 'joke' in response:
+                    existing_entry.setdefault('jokes', []).append(response['joke'])
+
+                if 'fact' in response:
+                    existing_entry.setdefault('facts', []).append(response['fact'])
+
                 entry.update(existing_entry)
-
+        # self.dynamo_db_client.update(entry)
+        logger.info(f"Sucessfully updated entry: {entry}")
         self.send_event_to_ddb(entry)
-
 
     def send_event_to_sns(self, event):
         logger.info("Sending to SNS event: %s", event)

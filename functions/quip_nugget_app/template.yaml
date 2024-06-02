@@ -27,7 +27,7 @@ Resources:
       MemorySize: 256
       PackageType: Zip
       Runtime: python3.11
-      Timeout: 300
+      Timeout: 600
       Tracing: Active
 
       Policies:

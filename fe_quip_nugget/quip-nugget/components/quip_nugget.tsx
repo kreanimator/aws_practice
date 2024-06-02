@@ -24,7 +24,10 @@ const QuipNugget: React.FC = () => {
     const onSubmit = async () => {
         console.log("Submitting: " + prompt);
         setIsLoading(true);
-        fetch(`${ENDPOINT}?user_input=${prompt}`)
+        const requestOptions: RequestInit = {
+            timeout: 10000, // Timeout in milliseconds (10 seconds in this case)
+        };
+        fetch(`${ENDPOINT}?user_input=${prompt}`, requestOptions)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error("Network response was not ok");
@@ -37,7 +40,7 @@ const QuipNugget: React.FC = () => {
                 console.error("Error fetching data:", error);
                 setIsLoading(false);
             });
-};
+    };
 
     const onResult = (data: any) => {
         console.log("Received data:", data);
