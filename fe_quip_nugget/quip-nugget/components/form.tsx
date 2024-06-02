@@ -1,33 +1,36 @@
+import React from "react";
+import { PacmanLoader } from "react-spinners";
+
 interface FormProps {
     prompt: string;
     setPrompt: any;
     onSubmit: any;
     isLoading: boolean;
     characterLimit: number;
-
-    }
+}
 
 const Form: React.FC<FormProps> = (props) => {
-
     const isPromptValid = props.prompt.length < props.characterLimit;
     const updatePromptValue = (text: string) => {
-        if (text.length <= props.characterLimit){
-            props.setPrompt(text)
-
-            }
-        };
+        if (text.length <= props.characterLimit) {
+            props.setPrompt(text);
+        }
+    };
 
     let statusColor = "text-slate-500";
     let statusText = null;
-    if (!isPromptValid){
-
-        statusColor="text-red-500";
+    if (!isPromptValid) {
+        statusColor = "text-red-500";
         statusText = `Input must be less than ${props.characterLimit} characters.`;
-        }
-
+    }
 
     return (
-        <>
+        <div className="relative">
+            {props.isLoading && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                    <PacmanLoader color="#36d7b7" loading={props.isLoading} height={6} width={100} />
+                </div>
+            )}
             <div className="mb-6 text-slate-400 flex justify-center">
                 <p>Got something on your mind? Share it, and I'll whip up a witty quip just for you!</p>
             </div>
@@ -47,14 +50,10 @@ const Form: React.FC<FormProps> = (props) => {
                 ${props.isLoading || !isPromptValid ? 'disabled:opacity-50 cursor-not-allowed' : ''}`}
                 onClick={props.onSubmit}
                 disabled={props.isLoading || !isPromptValid}>
-                {props.isLoading && (
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <div className="w-6 h-6 border-4 border-transparent border-t-4 border-emerald-900 rounded-full animate-spin"></div>
-                    </div>
-                )}
                 {props.isLoading ? "Generating..." : "Hit me with a Quip Nugget!"}
             </button>
-        </>
+        </div>
     );
 };
+
 export default Form;
