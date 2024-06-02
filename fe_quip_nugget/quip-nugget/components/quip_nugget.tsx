@@ -21,7 +21,7 @@ const QuipNugget: React.FC = () => {
         console.log({ joke, fact, keywords, hasResult, isLoading });
     }, []);
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         console.log("Submitting: " + prompt);
         setIsLoading(true);
         fetch(`${ENDPOINT}?user_input=${prompt}`)
