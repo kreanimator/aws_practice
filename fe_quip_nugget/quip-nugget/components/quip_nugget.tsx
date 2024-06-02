@@ -21,27 +21,31 @@ const QuipNugget: React.FC = () => {
         console.log({ joke, fact, keywords, hasResult, isLoading });
     }, []);
 
-const onSubmit = (retryCount = 0) => {
-    console.log("Submitting: " + prompt);
-    setIsLoading(true);
-    fetch(`${ENDPOINT}?user_input=${prompt}`)
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return res.json();
-        })
-        .then(onResult)
-        .catch((error) => {
-            console.error("Error fetching data:", error);
-            if (retryCount < 3) { // Retry up to 3 times
-                console.log(`Retrying... (${retryCount + 1})`);
-                onSubmit(retryCount + 1);
-            } else {
-                setIsLoading(false);
-                alert("Something went wrong. Please try again later.");
-            }
-        });
+    const onSubmit = (retryCount = 0) => {
+        console.log("Submitting: " + prompt);
+        setIsLoading(true);
+        fetch(`${ENDPOINT}?user_input=${prompt}`)
+            .then((res) => {
+                console.log("Response status:", res.status);
+                if (!res.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return res.json();
+            })
+            .then((data) => {
+                console.log("Received data:", data);
+                onResult(data);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+                if (retryCount < 3) { // Retry up to 3 times
+                    console.log(`Retrying... (${retryCount + 1})`);
+                    onSubmit(retryCount + 1);
+                } else {
+                    setIsLoading(false);
+                    alert("Something went wrong. Please try again later."); // Show alert after 3 retries
+                }
+            });
 };
 
     const onResult = (data: any) => {
