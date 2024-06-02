@@ -1,4 +1,3 @@
-__author__ = "Valentin Bakin"
 interface FormProps {
     prompt: string;
     setPrompt: any;

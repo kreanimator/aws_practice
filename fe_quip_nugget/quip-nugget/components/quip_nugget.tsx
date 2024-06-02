@@ -5,7 +5,6 @@ import Results from "./results"
 import { useState } from "react";
 import Image from "next/image";
 import logo from "../public/gold-nugget.png";
-__author__ = "Valentin Bakin"
 
 const QuipNugget: React.FC = () => {
     const CHARACTER_LIMIT: number = 32;

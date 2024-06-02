@@ -1,5 +1,4 @@
 import Share from "./share";
-__author__ = "Valentin Bakin"
 
 interface ResultsProps{
         prompt: string;

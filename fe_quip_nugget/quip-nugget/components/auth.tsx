@@ -1,5 +1,4 @@
 import React from "react";
-__author__ = "Valentin Bakin"
 
 interface AuthProps {
     setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
