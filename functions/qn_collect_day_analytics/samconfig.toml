@@ -1,8 +1,8 @@
 version = 0.1
 
 [default.deploy.parameters]
-stack_name = "dev-qn_collect_day_analytics"
-s3_prefix = "dev-qn_collect_day_analytics"
+stack_name = "dev-qn-collect-day-analytics"
+s3_prefix = "dev-qn-collect-day-analytics"
 parameter_overrides = "Stage=\"dev\""
 region = "us-west-2"
 resolve_s3 = true
@@ -12,8 +12,8 @@ force-upload = true
 capabilities = "CAPABILITY_IAM"
 
 [prod.deploy.parameters]
-stack_name = "qn_collect_day_analytics"
-s3_prefix = "qn_collect_day_analytics"
+stack_name = "qn-collect-day-analytics"
+s3_prefix = "qn-collect-day-analytics"
 parameter_overrides = "Stage=\"prod\""
 region = "us-west-2"
 resolve_s3 = true
