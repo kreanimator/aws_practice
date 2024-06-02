@@ -29,9 +29,7 @@ const Form: React.FC<FormProps> = (props) => {
     return (
         <>
             <div className="mb-6 text-slate-400 flex justify-center">
-                <p>
-                    Got something on your mind? Share it, and I'll whip up a witty quip just for you!
-                </p>
+                <p>Got something on your mind? Share it, and I'll whip up a witty quip just for you!</p>
             </div>
             <input
                 className="p-2 w-full rounded-md focus:outline-teal-400 focus:outline text-slate-700"
@@ -41,14 +39,19 @@ const Form: React.FC<FormProps> = (props) => {
                 onChange={(e) => updatePromptValue(e.currentTarget.value)}
             />
             <div className={statusColor + " flex justify-between my-2 mb-6"}>
-            <div>{statusText}</div>
-            <div>{props.prompt.length}/{props.characterLimit}</div>
+                <div>{statusText}</div>
+                <div>{props.prompt.length}/{props.characterLimit}</div>
             </div>
             <button
-                className={`bg-gradient-to-r from-emerald-400 to-emerald-800 w-full p-2 rounded-md text-lg
+                className={`relative bg-gradient-to-r from-emerald-400 to-emerald-800 w-full p-2 rounded-md text-lg
                 ${props.isLoading || !isPromptValid ? 'disabled:opacity-50 cursor-not-allowed' : ''}`}
                 onClick={props.onSubmit}
                 disabled={props.isLoading || !isPromptValid}>
+                {props.isLoading && (
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <div className="w-6 h-6 border-4 border-transparent border-t-4 border-emerald-900 rounded-full animate-spin"></div>
+                    </div>
+                )}
                 {props.isLoading ? "Generating..." : "Hit me with a Quip Nugget!"}
             </button>
         </>
